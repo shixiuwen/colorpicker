@@ -20,8 +20,6 @@ public class ColorPickerView extends LinearLayout {
     private final RelativeLayout.LayoutParams transBarLayoutParams;
     private int red = 255, green = 0, blue = 0;
     private int index = 0;
-    private float widthPercent;
-    private float heightPercent;
     private ColorPreviewView cpvColorPreview;
     private View vLocation;
     private View vBgColor;
@@ -31,12 +29,15 @@ public class ColorPickerView extends LinearLayout {
     private final ImageView vTransPreview;
 
     private OnColorChangeListener onColorChangeListener;
+    private RelativeLayout.LayoutParams vLocationLayoutParams;
 
     public ColorPickerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         View view = LayoutInflater.from(context).inflate(R.layout.view_color_picker, this);
         vBgColor = view.findViewById(R.id.fl_color);
         vLocation = view.findViewById(R.id.view_location);
+        vLocationLayoutParams = (RelativeLayout.LayoutParams) vLocation.getLayoutParams();
+
         llColorProgress = findViewById(R.id.ll_color_progress);
         cpvColorPreview = view.findViewById(R.id.cpv_color_preview);
         vColorBar = view.findViewById(R.id.view_color_bar);
@@ -121,20 +122,19 @@ public class ColorPickerView extends LinearLayout {
                     case MotionEvent.ACTION_DOWN:
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        widthPercent = 1 - event.getX() / width;
-                        heightPercent = event.getY() / height;
+                        float widthPercent = 1 - event.getX() / width;
+                        float heightPercent = event.getY() / height;
                         if (widthPercent <= 0 || widthPercent >= 1 || heightPercent <= 0 || heightPercent >= 1) {
                             return true;
                         }
-                        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) vLocation.getLayoutParams();
-                        layoutParams.leftMargin = (int) event.getX();
-                        layoutParams.topMargin = (int) event.getY();
+                        vLocationLayoutParams.leftMargin = (int) event.getX();
+                        vLocationLayoutParams.topMargin = (int) event.getY();
                         //防止越界处理
-                        if (layoutParams.leftMargin > width - vLocation.getWidth()
-                                || layoutParams.topMargin > height - vLocation.getHeight()) {
+                        if (vLocationLayoutParams.leftMargin > width - vLocation.getWidth()
+                                || vLocationLayoutParams.topMargin > height - vLocation.getHeight()) {
                             return true;
                         }
-                        vLocation.setLayoutParams(layoutParams);
+                        vLocation.setLayoutParams(vLocationLayoutParams);
                         changeColor();
                         break;
                     case MotionEvent.ACTION_UP:
@@ -197,36 +197,38 @@ public class ColorPickerView extends LinearLayout {
         int tempRed = red;
         int tempGreen = green;
         int tempBlue = blue;
+        float hPercent = 1 - ((vLocationLayoutParams.leftMargin + vLocation.getWidth() / 2F) / vBgColor.getWidth());
+        float vPercent = ((vLocationLayoutParams.topMargin + vLocation.getHeight() / 2F) / vBgColor.getWidth());
         switch (index) {
             case 0:
-                tempGreen = (int) (green + widthPercent * (255 - green));
-                tempBlue = (int) (blue + widthPercent * (255 - blue));
+                tempGreen = (int) (green + hPercent * (255 - green));
+                tempBlue = (int) (blue + hPercent * (255 - blue));
                 break;
             case 1:
-                tempRed = (int) (red + widthPercent * (255 - red));
-                tempBlue = (int) (blue + widthPercent * (255 - blue));
+                tempRed = (int) (red + hPercent * (255 - red));
+                tempBlue = (int) (blue + hPercent * (255 - blue));
                 break;
             case 2:
-                tempRed = (int) (red + widthPercent * (255 - red));
-                tempBlue = (int) (blue + widthPercent * (255 - blue));
+                tempRed = (int) (red + hPercent * (255 - red));
+                tempBlue = (int) (blue + hPercent * (255 - blue));
                 break;
             case 3:
-                tempRed = (int) (red + widthPercent * (255 - red));
-                tempGreen = (int) (green + widthPercent * (255 - green));
+                tempRed = (int) (red + hPercent * (255 - red));
+                tempGreen = (int) (green + hPercent * (255 - green));
                 break;
             case 4:
-                tempRed = (int) (red + widthPercent * (255 - red));
-                tempGreen = (int) (green + widthPercent * (255 - green));
+                tempRed = (int) (red + hPercent * (255 - red));
+                tempGreen = (int) (green + hPercent * (255 - green));
                 break;
             case 5:
             case 6:
-                tempGreen = (int) (green + widthPercent * (255 - green));
-                tempBlue = (int) (blue + widthPercent * (255 - blue));
+                tempGreen = (int) (green + hPercent * (255 - green));
+                tempBlue = (int) (blue + hPercent * (255 - blue));
                 break;
         }
-        tempRed = (int) (tempRed - tempRed * heightPercent);
-        tempGreen = (int) (tempGreen - tempGreen * heightPercent);
-        tempBlue = (int) (tempBlue - tempBlue * heightPercent);
+        tempRed = (int) (tempRed - tempRed * vPercent);
+        tempGreen = (int) (tempGreen - tempGreen * vPercent);
+        tempBlue = (int) (tempBlue - tempBlue * vPercent);
         int color = Color.argb(transValue, tempRed, tempGreen, tempBlue);
         cpvColorPreview.setColor(color);
         if (onColorChangeListener != null) {
