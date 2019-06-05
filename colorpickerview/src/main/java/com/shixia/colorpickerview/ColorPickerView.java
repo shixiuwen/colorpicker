@@ -30,6 +30,8 @@ public class ColorPickerView extends LinearLayout {
     private int transValue = 255;    //透明度
     private final ImageView vTransPreview;
 
+    private OnColorChangeListener onColorChangeListener;
+
     public ColorPickerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         View view = LayoutInflater.from(context).inflate(R.layout.view_color_picker, this);
@@ -225,9 +227,13 @@ public class ColorPickerView extends LinearLayout {
         tempRed = (int) (tempRed - tempRed * heightPercent);
         tempGreen = (int) (tempGreen - tempGreen * heightPercent);
         tempBlue = (int) (tempBlue - tempBlue * heightPercent);
-        cpvColorPreview.setColor(Color.argb(transValue, tempRed, tempGreen, tempBlue));
-        int[] color = {Color.argb(0, 0, 0, 0), Color.rgb(tempRed, tempGreen, tempBlue)};
-        GradientDrawable drawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, color);
+        int color = Color.argb(transValue, tempRed, tempGreen, tempBlue);
+        cpvColorPreview.setColor(color);
+        if (onColorChangeListener != null) {
+            onColorChangeListener.colorChanged(color);
+        }
+        int[] gradientColor = {Color.argb(0, 0, 0, 0), Color.rgb(tempRed, tempGreen, tempBlue)};
+        GradientDrawable drawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, gradientColor);
         vTransPreview.setBackground(drawable);
     }
 
@@ -238,7 +244,11 @@ public class ColorPickerView extends LinearLayout {
      */
     private void changeTransparency(int progress) {
         transValue = (int) (progress / 100F * 255);
-        cpvColorPreview.setColor(Color.argb(transValue, red, green, blue));
+        int color = Color.argb(transValue, red, green, blue);
+        cpvColorPreview.setColor(color);
+        if (onColorChangeListener != null) {
+            onColorChangeListener.colorChanged(color);
+        }
     }
 
     @Override
@@ -257,5 +267,14 @@ public class ColorPickerView extends LinearLayout {
         int[] color = {Color.argb(0, 0, 0, 0), Color.rgb(255, 0, 0)};
         GradientDrawable drawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, color);
         vTransPreview.setBackground(drawable);
+    }
+
+    /**
+     * 设置该方法，颜色改变的时候会回调颜色值
+     *
+     * @param onColorChangeListener
+     */
+    public void setOnColorChangeListener(OnColorChangeListener onColorChangeListener) {
+        this.onColorChangeListener = onColorChangeListener;
     }
 }
