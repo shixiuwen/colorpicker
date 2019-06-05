@@ -2,17 +2,23 @@ package com.shixia.colorpickerview;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 
 public class ColorPickerView extends LinearLayout {
 
+    private final View llColorProgress;
+    private final View vColorBar;
+    private final View rlTransBar;
+    private final View vTransBar;
+    private final RelativeLayout.LayoutParams transBarLayoutParams;
     private int red = 255, green = 0, blue = 0;
     private int index = 0;
     private float widthPercent;
@@ -20,71 +26,90 @@ public class ColorPickerView extends LinearLayout {
     private View vColorPreview;
     private View vLocation;
     private View vBgColor;
+    private final RelativeLayout.LayoutParams colorBarLayoutParams;
+
+    private int transValue = 255;    //透明度
+    private final ImageView vTransPreview;
 
     public ColorPickerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         View view = LayoutInflater.from(context).inflate(R.layout.view_color_picker, this);
         vBgColor = view.findViewById(R.id.fl_color);
         vLocation = view.findViewById(R.id.view_location);
-        SeekBar sbColor = view.findViewById(R.id.sb_color);
+        llColorProgress = findViewById(R.id.ll_color_progress);
         vColorPreview = view.findViewById(R.id.view_color_preview);
-        sbColor.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        vColorBar = view.findViewById(R.id.view_color_bar);
+        colorBarLayoutParams = (RelativeLayout.LayoutParams) vColorBar.getLayoutParams();
+
+        rlTransBar = view.findViewById(R.id.rl_trans_bar);
+        vTransBar = view.findViewById(R.id.view_trans_bar);
+        transBarLayoutParams = (RelativeLayout.LayoutParams) vTransBar.getLayoutParams();
+
+        vTransPreview = view.findViewById(R.id.view_trans_preview);
+
+        llColorProgress.setOnTouchListener(new OnTouchListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                red = 0;
-                green = 0;
-                blue = 0;
-                index = (int) (progress / (100 / 6F));
-                float v = progress % (100 / 6F) / (100 / 6F);
-                switch (index) {
-                    case 0: //红<-->中--绿
-                        red = 255;
-                        green = (int) (255 * v);
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                int width = llColorProgress.getWidth();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
                         break;
-                    case 1://红--中<-->绿
-                        red = (int) (255 * (1 - v));
-                        green = 255;
+                    case MotionEvent.ACTION_MOVE:
                         break;
-                    case 2: //绿<-->中--蓝
-                        green = 255;
-                        blue = (int) (255 * v);
-                        break;
-                    case 3://绿--中<-->蓝
-                        green = (int) (255 * (1 - v));
-                        blue = 255;
-                        break;
-                    case 4: //蓝<-->中--红
-                        blue = 255;
-                        red = (int) (255 * v);
-                        break;
-                    case 5://蓝--中<-->红
-                        blue = (int) (255 * (1 - v));
-                        red = 255;
-                        break;
-                    default:
-                        red = 255;
+                    case MotionEvent.ACTION_UP:
                         break;
                 }
-                Log.e("color", "progress:" + progress + " v:" + v + " red:" + red + " green:" + green + " blue:" + blue);
-                vBgColor.setBackgroundColor(Color.rgb(red, green, blue));
-                changeColor();
+                float leftMargin = event.getX();
+                float x = 0;
+                if (leftMargin < vColorBar.getWidth() / 2) {
+                    colorBarLayoutParams.leftMargin = 0;
+                } else if (leftMargin > width - vColorBar.getWidth() / 2) {
+                    x = 100;
+                    colorBarLayoutParams.leftMargin = width - vColorBar.getWidth();
+                } else {
+                    x = event.getX() / width * 100;
+                    colorBarLayoutParams.leftMargin = (int) (leftMargin - vColorBar.getWidth() / 2);
+                }
+                vColorBar.setLayoutParams(colorBarLayoutParams);
+                onProgressChanged((int) x);
+                return true;
             }
+        });
 
+        rlTransBar.setOnTouchListener(new OnTouchListener() {
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                int width = rlTransBar.getWidth();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        break;
+                }
+                float leftMargin = event.getX();
+                float x = 0;
+                if (leftMargin < vTransBar.getWidth() / 2) {
+                    transBarLayoutParams.leftMargin = 0;
+                } else if (leftMargin > width - vTransBar.getWidth() / 2) {
+                    x = 100;
+                    transBarLayoutParams.leftMargin = width - vTransBar.getWidth();
+                } else {
+                    x = event.getX() / width * 100;
+                    transBarLayoutParams.leftMargin = (int) (leftMargin - vTransBar.getWidth() / 2);
+                }
+                vTransBar.setLayoutParams(transBarLayoutParams);
+                changeTransparency((int) x);
+                return true;
             }
         });
 
         vBgColor.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
                 int width = vBgColor.getWidth();
                 int height = vBgColor.getHeight();
                 int action = event.getAction();
@@ -106,10 +131,6 @@ public class ColorPickerView extends LinearLayout {
                             return true;
                         }
                         vLocation.setLayoutParams(layoutParams);
-                        Log.e("event", "X" + event.getX()
-                                + " Y" + event.getY()
-                                + " widthPercent:" + widthPercent
-                                + " heightPercent:" + heightPercent);
                         changeColor();
                         break;
                     case MotionEvent.ACTION_UP:
@@ -120,6 +141,54 @@ public class ColorPickerView extends LinearLayout {
         });
     }
 
+
+    /**
+     * 颜色值调整
+     *
+     * @param progressColor
+     */
+    private void onProgressChanged(int progressColor) {
+        red = 0;
+        green = 0;
+        blue = 0;
+        index = (int) (progressColor / (100 / 6F));
+        float v = progressColor % (100 / 6F) / (100 / 6F);
+        switch (index) {
+            case 0: //红<-->中--绿
+                red = 255;
+                green = (int) (255 * v);
+                break;
+            case 1://红--中<-->绿
+                red = (int) (255 * (1 - v));
+                green = 255;
+                break;
+            case 2: //绿<-->中--蓝
+                green = 255;
+                blue = (int) (255 * v);
+                break;
+            case 3://绿--中<-->蓝
+                green = (int) (255 * (1 - v));
+                blue = 255;
+                break;
+            case 4: //蓝<-->中--红
+                blue = 255;
+                red = (int) (255 * v);
+                break;
+            case 5://蓝--中<-->红
+                blue = (int) (255 * (1 - v));
+                red = 255;
+                break;
+            default:
+                red = 255;
+                break;
+        }
+        vBgColor.setBackgroundColor(Color.argb(transValue, red, green, blue));
+        changeColor();
+    }
+
+    /**
+     * 颜色明暗度调整
+     */
     private void changeColor() {
         int tempRed = red;
         int tempGreen = green;
@@ -154,8 +223,20 @@ public class ColorPickerView extends LinearLayout {
         tempRed = (int) (tempRed - tempRed * heightPercent);
         tempGreen = (int) (tempGreen - tempGreen * heightPercent);
         tempBlue = (int) (tempBlue - tempBlue * heightPercent);
-        Log.e("color", " red:" + tempRed + " green:" + tempGreen + " blue:" + tempBlue);
-        vColorPreview.setBackgroundColor(Color.rgb(tempRed, tempGreen, tempBlue));
+        vColorPreview.setBackgroundColor(Color.argb(transValue, tempRed, tempGreen, tempBlue));
+        int[] color = {Color.argb(0, 0, 0, 0), Color.rgb(tempRed, tempGreen, tempBlue)};
+        GradientDrawable drawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, color);
+        vTransPreview.setBackground(drawable);
+    }
+
+    /**
+     * 改变透明度
+     *
+     * @param progress
+     */
+    private void changeTransparency(int progress) {
+        transValue = (int) (progress / 100F * 255);
+        vColorPreview.setBackgroundColor(Color.argb(transValue, red, green, blue));
     }
 
     @Override
@@ -164,5 +245,11 @@ public class ColorPickerView extends LinearLayout {
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) vLocation.getLayoutParams();
         layoutParams.leftMargin = vBgColor.getWidth() - vLocation.getWidth();
         vLocation.setLayoutParams(layoutParams);
+
+        colorBarLayoutParams.leftMargin = llColorProgress.getWidth() - vColorBar.getWidth();
+        vColorBar.setLayoutParams(colorBarLayoutParams);
+
+        transBarLayoutParams.leftMargin = rlTransBar.getWidth() - vTransBar.getWidth();
+        vTransBar.setLayoutParams(transBarLayoutParams);
     }
 }

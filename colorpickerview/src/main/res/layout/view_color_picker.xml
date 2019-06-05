@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginTop="100dp"
-        android:background="#8B1A1A">
+        android:background="#ffff0000">
 
         <View
             android:layout_width="match_parent"
@@ -36,66 +36,123 @@
         android:orientation="horizontal"
         android:padding="10dp">
 
-        <View
-            android:id="@+id/view_color_preview"
+        <FrameLayout
             android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:background="#f00" />
+            android:layout_height="40dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/bg_trans_02" />
+
+            <View
+                android:id="@+id/view_color_preview"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:background="#f00" />
+
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:paddingLeft="14dp"
-                android:paddingRight="14dp">
+            <RelativeLayout
+                android:id="@+id/rl_color_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/ll_color_progress"
+                        android:layout_width="match_parent"
+                        android:layout_height="12dp">
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_red_green_01" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_red_green_02" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_green_blue_01" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_green_blue_02" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_blue_red_01" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_blue_red_02" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_red_green_01" />
+                    android:id="@+id/view_color_bar"
+                    android:layout_width="6dp"
+                    android:layout_height="16dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/shape_color_pick_bar" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_trans_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="12dp"
+                    android:layout_centerVertical="true"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/bg_trans_01" />
+
+                <ImageView
+                    android:id="@+id/view_trans_preview"
+                    android:layout_width="match_parent"
+                    android:layout_height="12dp"
+                    android:layout_centerVertical="true" />
 
                 <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_red_green_02" />
+                    android:id="@+id/view_trans_bar"
+                    android:layout_width="6dp"
+                    android:layout_height="16dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/shape_color_pick_bar" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_green_blue_01" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_green_blue_02" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_blue_red_01" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_blue_red_02" />
-
-            </LinearLayout>
-
-            <SeekBar
-                android:id="@+id/sb_color"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            </RelativeLayout>
 
         </LinearLayout>
 
