@@ -29,6 +29,7 @@ allprojects {
 ```java
 final TextView tvTest = findViewById(R.id.tv_test);
 ColorPickerView colorPicker = findViewById(R.id.cpv_color_picker);
+//对控件进行回调监听，获取颜色值color
 colorPicker.setOnColorChangeListener(new OnColorChangeListener() {
     @Override
     public void colorChanged(int color) {
