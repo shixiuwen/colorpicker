@@ -2,7 +2,6 @@ package com.shixia.colorpickerview;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -23,7 +22,7 @@ public class ColorPickerView extends LinearLayout {
     private int index = 0;
     private float widthPercent;
     private float heightPercent;
-    private View vColorPreview;
+    private ColorPreviewView cpvColorPreview;
     private View vLocation;
     private View vBgColor;
     private final RelativeLayout.LayoutParams colorBarLayoutParams;
@@ -37,7 +36,7 @@ public class ColorPickerView extends LinearLayout {
         vBgColor = view.findViewById(R.id.fl_color);
         vLocation = view.findViewById(R.id.view_location);
         llColorProgress = findViewById(R.id.ll_color_progress);
-        vColorPreview = view.findViewById(R.id.view_color_preview);
+        cpvColorPreview = view.findViewById(R.id.cpv_color_preview);
         vColorBar = view.findViewById(R.id.view_color_bar);
         colorBarLayoutParams = (RelativeLayout.LayoutParams) vColorBar.getLayoutParams();
 
@@ -47,6 +46,7 @@ public class ColorPickerView extends LinearLayout {
 
         vTransPreview = view.findViewById(R.id.view_trans_preview);
 
+        /*调整颜色*/
         llColorProgress.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -77,6 +77,7 @@ public class ColorPickerView extends LinearLayout {
             }
         });
 
+        /*调整透明度*/
         rlTransBar.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -107,6 +108,7 @@ public class ColorPickerView extends LinearLayout {
             }
         });
 
+        /*调整颜色明暗*/
         vBgColor.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -182,7 +184,7 @@ public class ColorPickerView extends LinearLayout {
                 red = 255;
                 break;
         }
-        vBgColor.setBackgroundColor(Color.argb(transValue, red, green, blue));
+        vBgColor.setBackgroundColor(Color.rgb(red, green, blue));
         changeColor();
     }
 
@@ -223,7 +225,7 @@ public class ColorPickerView extends LinearLayout {
         tempRed = (int) (tempRed - tempRed * heightPercent);
         tempGreen = (int) (tempGreen - tempGreen * heightPercent);
         tempBlue = (int) (tempBlue - tempBlue * heightPercent);
-        vColorPreview.setBackgroundColor(Color.argb(transValue, tempRed, tempGreen, tempBlue));
+        cpvColorPreview.setColor(Color.argb(transValue, tempRed, tempGreen, tempBlue));
         int[] color = {Color.argb(0, 0, 0, 0), Color.rgb(tempRed, tempGreen, tempBlue)};
         GradientDrawable drawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, color);
         vTransPreview.setBackground(drawable);
@@ -236,7 +238,7 @@ public class ColorPickerView extends LinearLayout {
      */
     private void changeTransparency(int progress) {
         transValue = (int) (progress / 100F * 255);
-        vColorPreview.setBackgroundColor(Color.argb(transValue, red, green, blue));
+        cpvColorPreview.setColor(Color.argb(transValue, red, green, blue));
     }
 
     @Override
