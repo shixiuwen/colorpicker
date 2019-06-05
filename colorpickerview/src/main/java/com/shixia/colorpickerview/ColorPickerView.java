@@ -253,5 +253,9 @@ public class ColorPickerView extends LinearLayout {
 
         transBarLayoutParams.leftMargin = rlTransBar.getWidth() - vTransBar.getWidth();
         vTransBar.setLayoutParams(transBarLayoutParams);
+
+        int[] color = {Color.argb(0, 0, 0, 0), Color.rgb(255, 0, 0)};
+        GradientDrawable drawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, color);
+        vTransPreview.setBackground(drawable);
     }
 }
