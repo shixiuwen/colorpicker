@@ -3,7 +3,7 @@
 
 ## 效果预览
 
-[]
+![效果图](https://raw.githubusercontent.com/shixiuwen/colorpicker/master/app/preview.png)
 
 ## 如何使用
 
