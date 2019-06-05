@@ -36,7 +36,7 @@ public class ColorPreviewView extends View {
     }
 
     private void drawBottom() {
-        dstBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        dstBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_4444);
         Canvas canvas = new Canvas(dstBitmap);
         int layerAlpha = canvas.saveLayerAlpha(rectF, 255, Canvas.ALL_SAVE_FLAG);
         canvas.drawBitmap(bitmap, 0, 0, paint);
