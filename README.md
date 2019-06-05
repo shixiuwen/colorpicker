@@ -20,6 +20,6 @@ allprojects {
   
   ```java
   dependencies {
-	        implementation 'com.github.shixiuwen:colorpicker:Tag'
+	        implementation 'com.github.shixiuwen:colorpicker:v1.0.0'
 	}
   ```
