@@ -1,7 +1,11 @@
 # colorpicker
 仿AndroidStudio自带的Andriod颜色选择器控件
 
-# 如何使用
+## 效果预览
+
+[]
+
+## 如何使用
 
 > Step 1. Add the JitPack repository to your build file
 
