@@ -12,7 +12,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class ColorPreviewView extends View {
+class ColorPreviewView extends View {
 
     private final Bitmap bitmap;
     private final PorterDuffXfermode porterDuffXfermode;

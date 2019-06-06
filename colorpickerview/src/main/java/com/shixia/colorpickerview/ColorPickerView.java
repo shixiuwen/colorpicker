@@ -118,22 +118,29 @@ public class ColorPickerView extends LinearLayout {
                 int width = vBgColor.getWidth();
                 int height = vBgColor.getHeight();
                 int action = event.getAction();
+                int leftMargin;
+                int topMargin;
                 switch (action) {
                     case MotionEvent.ACTION_DOWN:
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        float widthPercent = 1 - event.getX() / width;
-                        float heightPercent = event.getY() / height;
-                        if (widthPercent <= 0 || widthPercent >= 1 || heightPercent <= 0 || heightPercent >= 1) {
-                            return true;
-                        }
-                        vLocationLayoutParams.leftMargin = (int) event.getX();
-                        vLocationLayoutParams.topMargin = (int) event.getY();
                         //防止越界处理
-                        if (vLocationLayoutParams.leftMargin > width - vLocation.getWidth()
-                                || vLocationLayoutParams.topMargin > height - vLocation.getHeight()) {
-                            return true;
+                        if (event.getX() > width - vLocation.getWidth() / 2F) {
+                            leftMargin = width - vLocation.getWidth();
+                        } else if (event.getX() < vLocation.getWidth() / 2F) {
+                            leftMargin = 0;
+                        } else {
+                            leftMargin = (int) (event.getX() - vLocation.getWidth() / 2F);
                         }
+                        if (event.getY() > height - vLocation.getHeight() / 2F) {
+                            topMargin = height - vLocation.getHeight();
+                        } else if (event.getY() <= vLocation.getHeight() / 2F) {
+                            topMargin = 0;
+                        } else {
+                            topMargin = (int) (event.getY() - vLocation.getHeight() / 2F);
+                        }
+                        vLocationLayoutParams.leftMargin = leftMargin;
+                        vLocationLayoutParams.topMargin = topMargin;
                         vLocation.setLayoutParams(vLocationLayoutParams);
                         changeColor();
                         break;
@@ -197,8 +204,8 @@ public class ColorPickerView extends LinearLayout {
         int tempRed = red;
         int tempGreen = green;
         int tempBlue = blue;
-        float hPercent = 1 - ((vLocationLayoutParams.leftMargin + vLocation.getWidth() / 2F) / vBgColor.getWidth());
-        float vPercent = ((vLocationLayoutParams.topMargin + vLocation.getHeight() / 2F) / vBgColor.getWidth());
+        float hPercent = 1 - (vLocation.getX() / (vBgColor.getWidth() - vLocation.getWidth()));
+        float vPercent = vLocation.getY() / (vBgColor.getHeight() - vLocation.getHeight());
         switch (index) {
             case 0:
                 tempGreen = (int) (green + hPercent * (255 - green));
