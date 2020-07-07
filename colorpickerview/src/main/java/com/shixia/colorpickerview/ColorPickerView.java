@@ -21,6 +21,7 @@ public class ColorPickerView extends LinearLayout {
     private int red = 255, green = 0, blue = 0;
     private int index = 0;
     private ColorPreviewView cpvColorPreview;
+    private LinearLayout llProgress;
     private View vLocation;
     private View vBgColor;
     private final RelativeLayout.LayoutParams colorBarLayoutParams;
@@ -35,6 +36,7 @@ public class ColorPickerView extends LinearLayout {
         super(context, attrs);
         View view = LayoutInflater.from(context).inflate(R.layout.view_color_picker, this);
         vBgColor = view.findViewById(R.id.fl_color);
+        llProgress = view.findViewById(R.id.ll_progress);
         vLocation = view.findViewById(R.id.view_location);
         vLocationLayoutParams = (RelativeLayout.LayoutParams) vLocation.getLayoutParams();
 
@@ -46,7 +48,6 @@ public class ColorPickerView extends LinearLayout {
         rlTransBar = view.findViewById(R.id.rl_trans_bar);
         vTransBar = view.findViewById(R.id.view_trans_bar);
         transBarLayoutParams = (RelativeLayout.LayoutParams) vTransBar.getLayoutParams();
-
         vTransPreview = view.findViewById(R.id.view_trans_preview);
 
         /*调整颜色*/
@@ -65,9 +66,9 @@ public class ColorPickerView extends LinearLayout {
                 }
                 float leftMargin = event.getX();
                 float x = 0;
-                if (leftMargin < vColorBar.getWidth() / 2) {
+                if (leftMargin < vColorBar.getWidth() / 2.0f) {
                     colorBarLayoutParams.leftMargin = 0;
-                } else if (leftMargin > width - vColorBar.getWidth() / 2) {
+                } else if (leftMargin > width - vColorBar.getWidth() / 2.0f) {
                     x = 100;
                     colorBarLayoutParams.leftMargin = width - vColorBar.getWidth();
                 } else {
@@ -96,9 +97,9 @@ public class ColorPickerView extends LinearLayout {
                 }
                 float leftMargin = event.getX();
                 float x = 0;
-                if (leftMargin < vTransBar.getWidth() / 2) {
+                if (leftMargin < vTransBar.getWidth() / 2.0f) {
                     transBarLayoutParams.leftMargin = 0;
-                } else if (leftMargin > width - vTransBar.getWidth() / 2) {
+                } else if (leftMargin > width - vTransBar.getWidth() / 2.0f) {
                     x = 100;
                     transBarLayoutParams.leftMargin = width - vTransBar.getWidth();
                 } else {
@@ -151,7 +152,6 @@ public class ColorPickerView extends LinearLayout {
             }
         });
     }
-
 
     /**
      * 颜色值调整
@@ -285,5 +285,24 @@ public class ColorPickerView extends LinearLayout {
      */
     public void setOnColorChangeListener(OnColorChangeListener onColorChangeListener) {
         this.onColorChangeListener = onColorChangeListener;
+    }
+
+    @Override
+    protected void onSizeChanged(int w, final int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        vBgColor.post(new Runnable() {
+            @Override
+            public void run() {
+                LinearLayout.LayoutParams layoutParams = (LayoutParams) vBgColor.getLayoutParams();
+                layoutParams.height = h - llProgress.getHeight();
+                vBgColor.setLayoutParams(layoutParams);
+            }
+        });
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        getParent().requestDisallowInterceptTouchEvent(true);
+        return super.dispatchTouchEvent(ev);
     }
 }

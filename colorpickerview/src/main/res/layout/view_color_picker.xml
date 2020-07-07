@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="240dp"
+    android:background="#FFF"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/fl_color"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:background="#ffff0000">
 
         <View
@@ -29,8 +32,9 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/ll_progress"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/color_change_bar_height"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="10dp">
@@ -43,7 +47,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -60,7 +64,8 @@
                     <LinearLayout
                         android:id="@+id/ll_color_progress"
                         android:layout_width="match_parent"
-                        android:layout_height="12dp">
+                        android:layout_height="12dp"
+                        android:orientation="horizontal">
 
                         <View
                             android:layout_width="0dp"

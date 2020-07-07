@@ -1,32 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_root"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/shape_gradually">
 
-    <com.shixia.colorpickerview.ColorPickerView
-        android:id="@+id/cpv_color_picker"
+    <HorizontalScrollView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tv_test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:shadowColor="#fff"
-        android:shadowDx="4"
-        android:shadowDy="4"
-        android:text="响应颜色变化改变背景色"
-        android:textColor="#000"
-        android:textSize="20sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cpv_color_picker" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-</android.support.constraint.ConstraintLayout>
+            <LinearLayout
+                android:layout_width="1080px"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.shixia.colorpickerview.ColorPickerView
+                    android:id="@+id/cpv_color_picker"
+                    android:layout_width="1080px"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_test"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="100dp"
+                    android:shadowColor="#fff"
+                    android:shadowDx="4"
+                    android:shadowDy="4"
+                    android:text="响应颜色变化改变背景色"
+                    android:textColor="#000"
+                    android:textSize="20sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cpv_color_picker" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="720px"
+                android:layout_height="match_parent"
+                android:background="#123"></LinearLayout>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+
+</LinearLayout>
