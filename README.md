@@ -24,7 +24,7 @@ allprojects {
   
   ```java
   dependencies {
-	        implementation 'com.github.shixiuwen:colorpicker:v1.0.4'
+	        implementation 'com.github.shixiuwen:colorpicker:v1.0.5'
 	}
   ```
 
